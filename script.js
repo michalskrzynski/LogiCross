@@ -1,30 +1,47 @@
 class Board {
-  constructor( div ) {
+  constructor( div, game ) {
     this.div = div;
+    this.game = game;
+    this.pawns = [];
   }
 
-  placePawns( startSequence ) {
+  update() {
     let pawnConfig = Pawn.cleanConfig();
 
     //first div row for board offset purposes
     for( let i = 0; i < 6; i++) this.div.appendChild( document.createElement("div") );
 
 
-    //drawing pawns
-    for(let i = 0; i < 4; i++ ) {
+    let cs = this.game.currentSetting;
+    for( let i = 0; i < cs.length; i++) {
       this.div.appendChild( document.createElement("div") );
 
-      for( let j = 0; j < 4; j++ ) {
+      for( let j = 0; j < cs[i].length; j++ ) {
         let pawnDiv = document.createElement( "div" );
         this.div.appendChild( pawnDiv ); 
 
-
-        let animal = startSequence[i*4 + j];
-        pawnConfig.imageMargin = Pawn.marginFor( animal );
+        pawnConfig.imageMargin = Pawn.marginFor( cs[i][j].colorAnimal );
         let pawn = new Pawn( pawnDiv, pawnConfig );
+
+        this.pawns.push( pawn );
       }
 
       this.div.appendChild( document.createElement("div") );
+    }
+
+
+    //drawing pawns
+    for(let i = 0; i < 4; i++ ) {
+      
+
+      for( let j = 0; j < 4; j++ ) {
+        
+
+
+        
+      }
+
+      
     }
 
 
@@ -72,19 +89,18 @@ class Game {
     if( !this.level ) throw new Error('Level not found: ' + originalLevel);
 
     if( !Game.isIntegral( this.startSequence ) ) throw new Error('Game integrity fail: ' + sequence.join( ' ' ));
-    this.solution = [];
-
   }
 
   
   //
   // Starts the game, i.e sets up all Moves on the imaginary board => currentSetting
   //
-  start() {
-    let count = 1;
+  restart() {
+    this.solution = [];
     this.currentSetting = [];
-    let ss = this.startSequence;
-
+    
+    
+    let count = 1;
     this.startSequence.reduce( (prev, curr) => {
       
       //below calculations because of transposed array in original game booklet, live with it
@@ -132,6 +148,9 @@ class Game {
     return this.currentSetting.flat().find( m => m !== null && m.colorAnimal === colorAnimal );
   }
 
+  //
+  //  Removes the pawn from currentSetting, puts it to the solution.
+  //
   makeMove( colorAnimal ) {
     if( this.isMoveAllowed( colorAnimal ) ) {
 
@@ -150,6 +169,7 @@ class Game {
   get lastMove() {
     return this.solution.length === 0 ? null : this.solution[ this.solution.length - 1 ];
   }
+
 
   //
   // Checks if the game is integral, i.e if all pawns are used.
@@ -192,15 +212,18 @@ class Pawn {
 
   constructor( div, config ) {
     this.div = div;
-    div.style.overflow = "hidden";
-    div.style.width = config.width;
-    div.style.height = config.height;
+
+    const innerDiv = document.createElement('div');
+    innerDiv.style.overflow = "hidden";
+    innerDiv.style.width = config.width;
+    innerDiv.style.height = config.height;
     
     this.img = document.createElement('img');
     this.img.src = config.imageSrc;
     this.img.style.margin = config.imageMargin;
 
-    div.appendChild( this.img );
+    innerDiv.appendChild( this.img );
+    this.div.appendChild( innerDiv );
   }
 
   static marginFor( colorAnimal ) {
@@ -229,13 +252,8 @@ class Pawn {
   }
 }
 
-let board = new Board( document.getElementById( "theBoard" ));
 let game = new Game(levels, 5);
-board.placePawns( game.startSequence ); 
-
-game.start();
-console.log( game.currentSetting );
-
+game.restart();
 let move = null;
 
 move = game.makeMove( 'RD' );
@@ -288,4 +306,21 @@ console.log( move.position, game.currentSetting );
 
 move = game.makeMove( 'BC' );
 console.log( move.position, game.currentSetting );
+
+///////////////////
+
+game.restart();
+
+let board = new Board( document.getElementById( "theBoard" ), game);
+board.update( game.startSequence ); 
+
+move = game.makeMove( 'RD' );
+console.log( move.position, game.currentSetting );
+
+move = game.makeMove( 'RC' );
+console.log( move.position, game.currentSetting );
+
+move = game.makeMove( 'WC' );
+console.log( move.position, game.currentSetting );
+
 
