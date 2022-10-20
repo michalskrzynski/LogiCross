@@ -35,8 +35,8 @@ class Board {
 
 class Move {
 
-  constructor( animalColor, position, row, col ) {
-    this.animalColor = animalColor;
+  constructor( colorAnimal, position, row, col ) {
+    this.colorAnimal = colorAnimal;
     this.position = position;
 
     this.row = row;
@@ -44,11 +44,11 @@ class Move {
   }
 
   get color() {
-    return this.animalColor[0];
+    return this.colorAnimal[0];
   }
 
   get animal() {
-    return this.animalColor[1];
+    return this.colorAnimal[1];
   }
 
 }
@@ -102,7 +102,11 @@ class Game {
     return Math.floor((count-1) / 4) + ((count-1) % 4)*4 + 1;
   }
 
-  isMoveAllowed( move ) {
+  isMoveAllowed( colorAnimal ) {
+    let move = this.#findMove( colorAnimal );
+    //cannot make a move if the pawn not in the currentSetting
+    if( move === null ) return false;
+
     //if this is the first move, and first pawn in a row
     if( this.lastMove === null ) return move.col === 0;
 
@@ -124,26 +128,23 @@ class Game {
     }
   }
 
-  makeMove( animalColor ) {
-    let theMove = this.currentSetting.flat().find( m => m !== null && m.animalColor === animalColor );
+  #findMove( colorAnimal ) {
+    return this.currentSetting.flat().find( m => m !== null && m.colorAnimal === colorAnimal );
+  }
 
+  makeMove( colorAnimal ) {
+    if( this.isMoveAllowed( colorAnimal ) ) {
 
-    if( theMove ) { //theMove will not be found if already in solution[]
-      if( this.isMoveAllowed( theMove ) ) {
-          this.solution.push( theMove );
-          
-          
-          // find and remove from currentSetting
-          let coord = this.#coordinatesForMove( theMove );
-          this.currentSetting[ coord.row ][ coord.col ] = null;
-      }
-      else throw new Error( 'Move not allowed' );
+        let theMove = this.#findMove( colorAnimal );
+        this.solution.push( theMove );
+        
+        // find and remove from currentSetting
+        let coord = this.#coordinatesForMove( theMove );
+        this.currentSetting[ coord.row ][ coord.col ] = null;
+
+        return theMove;
     }
-    else {
-      throw new Error( 'Pawn already out.' );
-    }
-
-    return theMove;
+    else throw new Error( 'Move not allowed' );
   }
 
   get lastMove() {
