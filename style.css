@@ -1,5 +1,61 @@
+@font-face {
+  font-family: 'fuzzy';
+  src: url('FuzzyBubbles-Bold.ttf');
+}
+
+:root {
+  --pawn-height: 136px;
+}
+
+body {
+  background-color: #bac0c9;
+  margin: 0;
+  font-family: fuzzy;
+}
+
+.page {
+  display: flex;
+}
+
+.left-side {
+  background-image: url("./board-left-586.jpeg");
+  background-repeat: repeat-x;
+}
+
+.right-side {
+  background-image: url("./board-right-586.jpeg");
+  background-repeat: repeat-x;
+}
+
+.left-side, .right-side {
+  flex: 1;
+  background-color: aqua;
+}
+
+button {
+  padding: 15px;
+  border-radius: 6px;
+  font-family: fuzzy;
+  background-color: green;
+  color: white;
+  border: 2px solid darkgreen;
+}
+
+.logo, .option {
+  display: block;
+  text-align: center;
+  margin: 30px;
+}
+
+.logo {
+  color: white;
+  font-size: 32px;
+  text-shadow: 2px 2px black;
+}
+
 .container {
   display: flex;
+  flex-direction: column;
   height: 100%;
   justify-content: center;
   align-items: center;
@@ -7,11 +63,11 @@
 
 .board {
   width: 640px;
-  background-image: url("./logicross.jpeg");
+  background-image: url("./board-640x586.jpeg");
 
   display: grid;
   grid-template-columns: 56px repeat(4, 1fr) 18px;
-  grid-template-rows: 16px repeat(4, 137px) 16px;
+  grid-template-rows: 20px repeat(4, var(--pawn-height)) 20px;
   grid-row-start: 1;
   grid-row-end: 6;
 }
@@ -20,13 +76,45 @@
   /* border: 1px solid red; */
 }
 
-
-.cropped {
-  width: 140px;
-  height: 140px;
-  overflow: hidden;
+.pawn {
 }
 
-.cropped img {
-  margin: -16px -56px 0px -0px;
+.position {
+  width: 42px;
+  height: 24px;
+  position: relative;
+  top: -28px;
+  border-radius: 8px;
+  border: 2px solid green;
+  background-color: lightgrey;
+  text-align: center;
+  font-size: 22px;
+}
+
+.outcome {
+  border-top: 1px solid grey;
+  display: flex;
+}
+
+#theResult {
+  display: flex;
+  margin-top: 50px;
+}
+
+#youWon, #youLose {
+  display: none;
+}
+
+.solution {
+  margin-top: 6px;
+  padding: 10px 120px;
+  overflow: visible;
+  width: 100%;
+  height: var(--pawn-height);
+
+  display: flex;
+}
+
+.solution > div {
+  margin-left: -80px;
 }

@@ -5,14 +5,38 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="style.css" />
+    <!-- CSS only -->
     <title>Document</title>
     <script src="levels.js" defer></script>
+    <script src="Game.js" defer></script>
+    <script src="Board.js" defer></script>
     <script src="script.js" defer></script>
   </head>
   <body>
-    <div class="container">
-      <div id="theBoard" class="board">
-
+    <div class="page">
+      <div class="left-side">
+        <div class="logo">LogiCross</div>
+        <div class="option"><button id="howToPlay">How To Play</button></div>
+        <div class="option"><div class="difficulty">Radio: Easy / Hard</div></div>
+        <div class="option">
+          <input type="number" name="level" id="levelNumber">
+          <button class="btn btn-submit" id="levelUp"></button>
+          <button id="levelDown"></button>
+        </div>
+      </div>
+      <div class="container">
+        <div id="theBoard" class="board"></div>
+      </div>
+      <div class="right-side">
+        <div class="option"><button id="repeatLevel">Repeat</button></div>
+        <div class="option"><button id="goBack">Go Back</button></div>
+      </div>
+    </div>
+    <div class="outcome">
+      <div id="theSolution" class="solution"></div>
+      <div id="theResult">
+        <div id="youWon">Yay! You Won!</div>
+        <div id="youLose">Deadlock. You Lose.</div>
       </div>
     </div>
   </body>
