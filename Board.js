@@ -6,11 +6,29 @@ class Board {
   static initiate( theBoardDiv, theSolutionDiv, game ) {
     Board.theBoardDiv = theBoardDiv;
     Board.theSolutionDiv = theSolutionDiv;
-    Board.game = game;
-    Board.pawns = [];
   }
 
-  static placeAllPawns() {
+  static play( game ) {
+    Board.game = game;
+    Board.pawns = [];
+    Board.#placeAllPawns(); 
+  }
+
+  static putPawnBack( lastMove ) {
+    let pawn = Board.pawns.find( p => p.move.position === lastMove.position );
+    Board.#pawnBackOnTheBoard(pawn);
+  }
+
+  static resetLevel() {
+    Board.pawns.forEach( p => Board.#pawnBackOnTheBoard( p ) );
+    Board.game.restart();
+  }
+
+
+  //
+  //  PRIVATE
+  //
+  static #placeAllPawns() {
     let pawnConfig = Pawn.cleanConfig();
 
     //first div row for board offset purposes
@@ -39,30 +57,24 @@ class Board {
   }
 
   static #addAllEventListeners() {
-    Board.pawns.forEach( p => p.contentDiv.addEventListener( "click", Board.onPawnClick ) );
+    Board.pawns.forEach( p => p.contentDiv.addEventListener( "click", Board.#onPawnClick ) );
   }
 
 
 
-  static onPawnClick( e ) {
-    let colorAnimal = e.currentTarget.id.substring(5); //
-
-
+  static #onPawnClick( e ) {
+    let colorAnimal = Board.#extractPawnDescriptor(e.currentTarget.id); 
     if( Board.game.isMoveAllowed( colorAnimal ) ) {
 
-      e.currentTarget.removeEventListener('click', Board.onPawnClick);
+      //making the move
+      e.currentTarget.removeEventListener('click', Board.#onPawnClick);
       Board.game.makeMove( colorAnimal );
       Board.theSolutionDiv.appendChild( e.currentTarget );
 
 
       setTimeout( function() {
-        if( Board.game.solution.length === 16 ) {
-          alert("You won! Press OK to play next level.");
-          Board.resetLevel();
-        } else if ( Board.game.isDeadlock() ) {
-          alert("You lost! Press OK to play again.");
-          Board.resetLevel();
-        }
+        if( Board.game.isFinished() === 16 ) alert("You won!");
+        else if ( Board.game.isDeadlock() ) alert("You lost!");
       }, 100);
 
     } 
@@ -71,19 +83,13 @@ class Board {
     }
   } 
 
-  static putPawnBack( lastMove ) {
-    let pawn = Board.pawns.find( p => p.move.position === lastMove.position );
-    Board.#pawnBackOnTheBoard(pawn);
-  }
-
-  static resetLevel() {
-    Board.pawns.forEach( p => Board.#pawnBackOnTheBoard( p ) );
-    Board.game.restart();
+  static #extractPawnDescriptor( pawnId ) {
+    return pawnId.substring(5); 
   }
 
   static #pawnBackOnTheBoard(pawn) {
     pawn.gridDiv.appendChild(pawn.contentDiv);
-    pawn.contentDiv.addEventListener('click', Board.onPawnClick);
+    pawn.contentDiv.addEventListener('click', Board.#onPawnClick);
   }
 }
 
@@ -100,6 +106,7 @@ class Pawn {
   static borderRadius = 9;
 
   //gridDiv - parent container
+  //contentDiv - div representing this Pawn
   //imageHolder - div holding the image
   //img - image inside the container
 

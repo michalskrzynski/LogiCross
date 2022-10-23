@@ -13,6 +13,8 @@
     <script src="script.js" defer></script>
   </head>
   <body>
+
+
     <div id="rulesPopup" class="popup">
       <div>
         <h2>How To Play LogiCross...</h2>
@@ -23,26 +25,37 @@
           <li>The animals on the left side are first to cross the river. During the first move any animal first in line may cross it.</li>
           <li>Next move is possible only for an animal first in line, and of the same species or same colour as in the previous move.</li>
         </ol>
+        <button id="closePopup" class="close">Close</button>
       </div>
     </div>
+
+
     <div class="page">
       <div class="left-side">
         <div class="logo">LogiCross</div>
-        <div class="option"><button id="howToPlay">How To Play</button></div>
-        <div class="option"><div class="difficulty"><span id="gameEasy">Easy</span> / <span id="gameHard">Hard</span></div></div>
+        <div class="option"><button id="howToPlay" class="shadowed">How To Play</button></div>
         <div class="option">
-          <input type="number" name="level" id="levelNumber"><button id="changeLevel">GO!</button>
-          <small>Between 1 and 60.</small>
+          <div class="difficulty">
+            <p><small>Switch difficulty</small></p>
+            <span id="gameEasy">Easy</span> / <span id="gameHard">Hard</span>
+          </div>
+        </div>
+        <div class="option">
+          <p><small>Change level</small></p>
+          <input type="number" name="level" id="inputLevel" class="shadowed"><button id="changeLevel" class="shadowed">GO!</button>
+          <p><small>Between 1 and 60</small></p>
         </div>
       </div>
       <div class="container">
         <div id="theBoard" class="board"></div>
       </div>
       <div class="right-side">
-        <div class="option"><button id="repeatLevel">Repeat</button></div>
-        <div class="option"><button id="undo">Undo</button></div>
+        <div class="option"><button id="repeatLevel" class="shadowed">Repeat</button></div>
+        <div class="option"><button id="undo" class="shadowed">Undo</button></div>
       </div>
     </div>
+
+
     <div class="outcome">
       <div id="theSolution" class="solution"></div>
       <div id="theResult">

@@ -61,6 +61,10 @@ class Game {
     }, []);
   }
 
+  //
+  // Mutates this.currentSetting by reverting last move.
+  // @return lastMove
+  //
   moveBack() {
     let lastMove = this.solution.pop();
     this.currentSetting[ lastMove.row ][ lastMove.col ] = lastMove;
@@ -69,6 +73,7 @@ class Game {
   }
 
   get lastMove() {
+    if( !this.solution.length ) return null;
     return this.solution[ this.solution.length-1 ];
   }
 
@@ -91,6 +96,10 @@ class Game {
     
     let sliced = this.currentSetting[move.row].slice(0, move.col);
     return move.col === 0 || this.currentSetting[move.row].slice(0, move.col).every( m => m === null);
+  }
+
+  isFinished() {
+    return this.solution.length === 16;
   }
 
   #coordinatesForMove( move ) {
