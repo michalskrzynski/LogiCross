@@ -63,7 +63,8 @@ class Game {
 
   moveBack() {
     let lastMove = this.solution.pop();
-    this.currentSetting[ lastMove.col ][ lastMove.row ] = lastMove;
+    this.currentSetting[ lastMove.row ][ lastMove.col ] = lastMove;
+    //console.log( this.currentSetting );
     return lastMove;
   }
 
@@ -119,6 +120,8 @@ class Game {
         // find and remove from currentSetting
         let coord = this.#coordinatesForMove( theMove );
         this.currentSetting[ coord.row ][ coord.col ] = null;
+
+        //console.log( this.currentSetting );
 
         return theMove;
     }
