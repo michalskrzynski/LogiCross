@@ -63,8 +63,12 @@ class Game {
 
   moveBack() {
     let lastMove = this.solution.pop();
-    this.currentSetting[ lastMove.row, lastMove.col ] = lastMove;
+    this.currentSetting[ lastMove.col ][ lastMove.row ] = lastMove;
     return lastMove;
+  }
+
+  get lastMove() {
+    return this.solution[ this.solution.length-1 ];
   }
 
   #transposeCountFrom1( count ) {
@@ -89,9 +93,11 @@ class Game {
   }
 
   #coordinatesForMove( move ) {
+
     let cs = this.currentSetting;
     for( let i = 0; i < cs.length; i++ ) {
       for( let j = 0; j < cs[i].length; j++ ) {
+        // are null if the CS is already empty in that position
         if( cs[i][j] !== null && move.position === cs[i][j].position ) { return { row: i, col: j } }
       }
     }

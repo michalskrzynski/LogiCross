@@ -45,20 +45,26 @@ class Board {
 
 
   static onPawnClick( e ) {
+    let colorAnimal = e.currentTarget.id.substring(5); //
 
-    let colorAnimal = e.currentTarget.id.substring(5);
+
     if( Board.game.isMoveAllowed( colorAnimal ) ) {
+
       e.currentTarget.removeEventListener('click', Board.onPawnClick);
       Board.game.makeMove( colorAnimal );
       Board.theSolutionDiv.appendChild( e.currentTarget );
 
-      if( Board.game.solution.length === 16 ) {
-        alert("You won! Press OK to play next level.");
-        Board.resetLevel();
-      } else if ( Board.game.isDeadlock() ) {
-        alert("You lost! Press OK to play again.");
-        Board.resetLevel();
-      }
+
+      setTimeout( function() {
+        if( Board.game.solution.length === 16 ) {
+          alert("You won! Press OK to play next level.");
+          Board.resetLevel();
+        } else if ( Board.game.isDeadlock() ) {
+          alert("You lost! Press OK to play again.");
+          Board.resetLevel();
+        }
+      }, 100);
+
     } 
     else {
       alert( "This move is not allowed."); 
@@ -71,13 +77,13 @@ class Board {
   }
 
   static resetLevel() {
-    Board.game.restart();
     Board.pawns.forEach( p => Board.#pawnBackOnTheBoard( p ) );
+    Board.game.restart();
   }
 
   static #pawnBackOnTheBoard(pawn) {
     pawn.gridDiv.appendChild(pawn.contentDiv);
-    pawn.addEventListener('click', Board.onPawnClick);
+    pawn.contentDiv.addEventListener('click', Board.onPawnClick);
   }
 }
 

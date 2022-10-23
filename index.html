@@ -13,15 +13,26 @@
     <script src="script.js" defer></script>
   </head>
   <body>
+    <div id="rulesPopup" class="popup">
+      <div>
+        <h2>How To Play LogiCross...</h2>
+        <p>
+          <b>Help all animals cross the river.</b>
+        </p>
+        <ol>
+          <li>The animals on the left side are first to cross the river. During the first move any animal first in line may cross it.</li>
+          <li>Next move is possible only for an animal first in line, and of the same species or same colour as in the previous move.</li>
+        </ol>
+      </div>
+    </div>
     <div class="page">
       <div class="left-side">
         <div class="logo">LogiCross</div>
         <div class="option"><button id="howToPlay">How To Play</button></div>
-        <div class="option"><div class="difficulty">Radio: Easy / Hard</div></div>
+        <div class="option"><div class="difficulty">Radio: <span id="gameEasy">Easy</span> / <span id="gameHard">Hard</span></div></div>
         <div class="option">
-          <input type="number" name="level" id="levelNumber">
-          <button class="btn btn-submit" id="levelUp"></button>
-          <button id="levelDown"></button>
+          <input type="number" name="level" id="levelNumber"><button id="changeLevel">GO!</button>
+          <small>Between 1 and 60.</small>
         </div>
       </div>
       <div class="container">
@@ -29,7 +40,7 @@
       </div>
       <div class="right-side">
         <div class="option"><button id="repeatLevel">Repeat</button></div>
-        <div class="option"><button id="goBack">Go Back</button></div>
+        <div class="option"><button id="undo">Undo</button></div>
       </div>
     </div>
     <div class="outcome">
