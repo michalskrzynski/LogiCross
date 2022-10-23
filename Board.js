@@ -29,8 +29,6 @@ class Board {
   //  PRIVATE
   //
   static #placeAllPawns() {
-    let pawnConfig = Pawn.cleanConfig();
-
     //first div row for board offset purposes
     for( let i = 0; i < 6; i++) Board.theBoardDiv.appendChild( document.createElement("div") );
 
@@ -43,8 +41,7 @@ class Board {
         let pawnDiv = document.createElement( "div" );
         Board.theBoardDiv.appendChild( pawnDiv ); 
 
-        pawnConfig.imageMargin = Pawn.marginFor( cs[i][j].colorAnimal );
-        let pawn = new Pawn( pawnDiv, cs[i][j], pawnConfig );
+        let pawn = new Pawn( pawnDiv, cs[i][j] );
         Board.pawns.push( pawn );
       }
       Board.#addAllEventListeners();
@@ -66,16 +63,18 @@ class Board {
     let colorAnimal = Board.#extractPawnDescriptor(e.currentTarget.id); 
     if( Board.game.isMoveAllowed( colorAnimal ) ) {
 
+
       //making the move
       e.currentTarget.removeEventListener('click', Board.#onPawnClick);
       Board.game.makeMove( colorAnimal );
       Board.theSolutionDiv.appendChild( e.currentTarget );
 
-
+      //displaying alert WON / LOST
       setTimeout( function() {
-        if( Board.game.isFinished() === 16 ) alert("You won!");
+        if( Board.game.isFinished() ) alert("You won!");
         else if ( Board.game.isDeadlock() ) alert("You lost!");
       }, 100);
+
 
     } 
     else {
@@ -90,6 +89,11 @@ class Board {
   static #pawnBackOnTheBoard(pawn) {
     pawn.gridDiv.appendChild(pawn.contentDiv);
     pawn.contentDiv.addEventListener('click', Board.#onPawnClick);
+  }
+
+  static destroy() {
+    while( Board.theBoardDiv.firstChild ) Board.theBoardDiv.removeChild( Board.theBoardDiv.firstChild );
+    while( Board.theSolutionDiv.firstChild ) Board.theSolutionDiv.removeChild( Board.theSolutionDiv.firstChild );
   }
 }
 
@@ -110,7 +114,10 @@ class Pawn {
   //imageHolder - div holding the image
   //img - image inside the container
 
-  constructor( gridDiv, move, config ) {
+  constructor( gridDiv, move) {
+    let config = this.#cleanConfig();
+    config.imageMargin = this.#marginFor( move.colorAnimal );
+
     this.gridDiv = gridDiv;
     this.move = move;
 
@@ -141,7 +148,7 @@ class Pawn {
   }
 
 
-  static marginFor( colorAnimal ) {
+  #marginFor( colorAnimal ) {
     // WR = white rooster, BC = blue cow
     let color = colorAnimal[0];
     let animal = colorAnimal[1];
@@ -157,12 +164,12 @@ class Pawn {
     return margin;
   }
 
-  static cleanConfig() {
+  #cleanConfig() {
     return {
       width: (Pawn.defaultWidth - Pawn.borderRadius/2) + "px",
       height: (Pawn.defaultHeight - Pawn.borderRadius/2)+ "px",
       imageSrc: "./animals-640x580.jpeg",
-      imageMargin: Pawn.marginFor( "RC" ),
+      imageMargin: this.#marginFor( "RC" ),
     };
   }
 }

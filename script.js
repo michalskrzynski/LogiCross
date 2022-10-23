@@ -1,6 +1,10 @@
 class GameManager {
+  static theBoard;
+  static theSolution;
   static gameEasy;
   static gameHard;
+  static inputLevel;
+  static changeLevel;
   static repeatLevel;
   static undo;
 
@@ -16,6 +20,7 @@ class GameManager {
     GameManager.inputLevel = initObj.inputLevel;
     GameManager.changeLevel = initObj.changeLevel;
 
+
     GameManager.gameEasy.addEventListener( 'click', e=> { 
       gameEasy.style.textDecoration = 'underline'; 
       gameHard.style.textDecoration = 'none';
@@ -27,21 +32,18 @@ class GameManager {
       undo.style.visibility = 'hidden'; 
     });
 
-    GameManager.changeLevel.addEventListener('click', e=> GameManager.changeLevel() );
+
+    GameManager.changeLevel.addEventListener('click', GameManager.newLevel );
     GameManager.repeatLevel.addEventListener('click', e => Board.resetLevel() );
     GameManager.undo.addEventListener('click', GameManager.undoMove );
   } 
 
   static newGame( level ) {
-    GameManager.game = new Game(levels, level );
+    GameManager.game = new Game(levels, level);
     GameManager.game.restart();
 
     Board.initiate( GameManager.theBoard, GameManager.theSolution);
     Board.play( GameManager.game );
-  }
-
-  static changeLevel() {
-
   }
 
   static undoMove() {
@@ -50,6 +52,11 @@ class GameManager {
       Board.putPawnBack( lastMove ) 
       GameManager.game.moveBack();
     }
+  }
+
+  static newLevel() {
+    Board.destroy();
+    GameManager.newGame( Number( inputLevel.value ) );
   }
 }
 
@@ -75,7 +82,9 @@ GameManager.initialize( {
   undo: document.getElementById('undo'),
 });
 
-GameManager.newGame( 25 );
+let defaultLevel = 25;
+document.getElementById( 'inputLevel').value = defaultLevel;
+GameManager.newGame( defaultLevel );
 
 
 
